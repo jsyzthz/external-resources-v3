@@ -1,0 +1,10 @@
+{
+	"uno": true,
+	"nano": true,
+	"mpython": true,
+	"microbit": true,
+	"leonardo": true,
+	"mega2560": true,
+	"beetleProMini": false,
+	"include": "TPR_SSD1306_I2C_SSD1306_I2C.h"
+}

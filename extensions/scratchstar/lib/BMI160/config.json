@@ -1,0 +1,10 @@
+{
+	"uno": true,
+	"nano": true,
+	"mpython": true,
+	"microbit": true,
+	"leonardo": true,
+	"mega2560": true,
+	"beetleProMini": false,
+	"include": "BMI160.h"
+}

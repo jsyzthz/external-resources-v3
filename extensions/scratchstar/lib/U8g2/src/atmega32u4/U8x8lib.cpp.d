@@ -1,0 +1,21 @@
+/mnt/itinman-data/.cache/arduino/sketches/D1A3014B6A0470559AC25BFDA0E0219C/libraries/U8g2/U8x8lib.cpp.o: \
+ /mnt/itinman-data/arduino/libraries/U8g2/src/U8x8lib.cpp \
+ /mnt/itinman-data/arduino/libraries/U8g2/src/U8x8lib.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/Arduino.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/binary.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/WCharacter.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/WString.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/HardwareSerial.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/Stream.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/Print.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/Printable.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/USBAPI.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/Arduino.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/USBDesc.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/USBCore.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/leonardo/pins_arduino.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/Print.h \
+ /mnt/itinman-data/arduino/libraries/U8g2/src/clib/u8x8.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src/SPI.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src/Wire.h \
+ /mnt/itinman-data/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/Stream.h

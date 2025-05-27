@@ -2,12 +2,12 @@
     "updater": {
         "default": {
             "provider": "github",
-            "repo": "openblockcc/external-resources-v3"
+            "repo": "jsyzthz/external-resources-v3"
         },
         "cn": {
             "provider": "gitee",
-            "repo": "openblockcc/external-resources-v3"
+            "repo": "jsyzthz/external-resources-v3"
         }
     },
-    "version": "x.x.x"
+    "version": "1.0.0"
 }
