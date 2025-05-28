@@ -4,6 +4,7 @@ const scratchStar = formatMessage=> ({
     version: '1.0.0',
     supportDevice: ['scratchstar'],
     author: 'Stemstar',
+    iconURL: `assets/scratchstar.png`,
     description: formatMessage({
         id: 'scratchstar.description',
         default: 'Scratch Star.'
