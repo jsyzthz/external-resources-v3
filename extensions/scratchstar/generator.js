@@ -12,6 +12,36 @@ const CHIP_IO = [
     [0x18, 0x17, 0x16],
 ];
 
+
+const FUN_RANGE=`
+int mapRange(int input, int inputMin, int inputMax, int outputMin, int outputMax) {
+${Blockly.Arduino.INDENT}// 确保输入值在输入范围内
+${Blockly.Arduino.INDENT}input = constrain(input, inputMin, inputMax);
+${Blockly.Arduino.INDENT}// 线性映射
+${Blockly.Arduino.INDENT}// 使用long类型防止中间计算溢出
+${Blockly.Arduino.INDENT}long numerator = (long)(input - inputMin) * (outputMax - outputMin);
+${Blockly.Arduino.INDENT}int denominator = inputMax - inputMin;
+${Blockly.Arduino.INDENT}int output = numerator / denominator + outputMin;
+${Blockly.Arduino.INDENT}return output;
+}
+`
+const FUN_RANGE_JOYSTICK=`
+int mapJoystickRange(int data) {
+${Blockly.Arduino.INDENT}int center = 1024 / 2 - 1;
+${Blockly.Arduino.INDENT}int errorRange = 50;
+${Blockly.Arduino.INDENT}if (data < center + errorRange && data > center - errorRange) {
+${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}return 0;
+${Blockly.Arduino.INDENT}}
+${Blockly.Arduino.INDENT}if (data >= center + errorRange) {
+${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}return mapRange(data, center + errorRange, 1023, 1, 100);
+${Blockly.Arduino.INDENT}}
+${Blockly.Arduino.INDENT}if (data <= center - errorRange) {
+${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}return -(101 - mapRange(data, 0, center - errorRange, 1, 100));
+${Blockly.Arduino.INDENT}}
+${Blockly.Arduino.INDENT}return 0;
+}
+`
+
 function port2pin(port, index) {
     return CHIP_IO[parseInt(port) - 1][parseInt(index) - 1];
 }
@@ -110,7 +140,7 @@ Blockly.Arduino['scratchstar_DrawText'] = function (block) {
 
   var code = `gfx->setTextSize(${size});\n`+
   `gfx->setTextColor(RGB565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`+
-  `gfx->setCursor(${x}, ${y});\n`+
+  `gfx->setCursor(${x}, (319 - ${y}));\n`+
   `gfx->print(${text});\n`; 
   return code;
 }
@@ -129,7 +159,7 @@ Blockly.Arduino['scratchstar_DrawPixel'] = function (block) {
 
   Blockly.Arduino.setups_['TFT'] = "gfx->begin();\n  gfx->invertDisplay(true);";
   
-  return `gfx->drawPixel(${x}, ${y}, RGB565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+  return `gfx->drawPixel(${x}, (319 - ${y}), RGB565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
 }
 //画线
 Blockly.Arduino['scratchstar_DrawLine'] = function (block) {
@@ -148,7 +178,7 @@ Blockly.Arduino['scratchstar_DrawLine'] = function (block) {
 
   Blockly.Arduino.setups_['TFT'] = "gfx->begin();\n  gfx->invertDisplay(true);";
   
-  return `gfx->drawLine(${sx}, ${sy}, ${ex}, ${ey}, RGB565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+  return `gfx->drawLine(${sx}, (319 - ${sy}), ${ex}, (319 - ${ey}), RGB565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
 }
 //画矩形
 Blockly.Arduino['scratchstar_DrawRect'] = function (block) {
@@ -170,9 +200,9 @@ Blockly.Arduino['scratchstar_DrawRect'] = function (block) {
   
   // Check if filled or outline
   if (mode === '1') { // Outline
-      return `gfx->drawRect(${sx}, ${sy}, ${width}, ${height}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+      return `gfx->drawRect(${sx}, (319 - ${sy}), ${width}, ${height}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
   } else { // Filled
-      return `gfx->fillRect(${sx}, ${sy}, ${width}, ${height}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+      return `gfx->fillRect(${sx}, (319 - ${sy}), ${width}, ${height}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
   }
 }
 
@@ -196,9 +226,9 @@ Blockly.Arduino['scratchstar_DrawRoundRect'] = function (block) {
   
   // Check if filled or outline
   if (mode === '1') { // Outline
-      return `gfx->drawRoundRect(${sx}, ${sy}, ${width}, ${height}, ${radius}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+    return `gfx->drawRoundRect(${sx}, (319 - ${sy}), ${width}, ${height}, ${radius}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
   } else { // Filled
-      return `gfx->fillRoundRect(${sx}, ${sy}, ${width}, ${height}, ${radius}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+      return `gfx->fillRoundRect(${sx}, (319 - ${sy}), ${width}, ${height}, ${radius}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
   }
 }
 
@@ -220,9 +250,9 @@ Blockly.Arduino['scratchstar_DrawCircle'] = function (block) {
   
   // Check if filled or outline
   if (mode === '1') { // Outline
-      return `gfx->drawCircle(${cx}, ${cy}, ${radius}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+    return `gfx->drawCircle(${cx}, (319 - ${cy}), ${radius}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
   } else { // Filled
-      return `gfx->fillCircle(${cx}, ${cy}, ${radius}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+      return `gfx->fillCircle(${cx}, (319 - ${cy}), ${radius}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
   }
 }
 //画椭圆
@@ -245,9 +275,9 @@ Blockly.Arduino['scratchstar_DrawEllipse'] = function (block) {
   
   // Check if filled or outline
   if (mode === '1') { // Outline
-      return `gfx->drawEllipse(${cx}, ${cy}, ${longaxis}, ${shortaxis}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+    return `gfx->drawEllipse(${cx}, (319 - ${cy}), ${longaxis}, ${shortaxis}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
   } else { // Filled
-      return `gfx->fillEllipse(${cx}, ${cy}, ${longaxis}, ${shortaxis}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+      return `gfx->fillEllipse(${cx}, (319 - ${cy}), ${longaxis}, ${shortaxis}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
   }
 }
 
@@ -272,9 +302,9 @@ Blockly.Arduino['scratchstar_DrawTriangle'] = function (block) {
   
   // Check if filled or outline
   if (mode === '1') { // Outline
-      return `gfx->drawTriangle(${ax}, ${ay}, ${bx}, ${by}, ${cx}, ${cy}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+    return `gfx->drawTriangle(${ax}, ${ay}, ${bx}, (319 - ${by}), ${cx}, (319 - ${cy}), gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
   } else { // Filled
-      return `gfx->fillTriangle(${ax}, ${ay}, ${bx}, ${by}, ${cx}, ${cy}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
+      return `gfx->fillTriangle(${ax}, ${ay}, ${bx}, (319 - ${by}), ${cx}, (319 - ${cy}), gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
   }
 }
 
@@ -314,13 +344,16 @@ Blockly.Arduino['scratchstar_GetUltrasonic'] = function (block) {
   Blockly.Arduino.setups_['GetUltrasonic' + trigPin] = `pinMode(${trigPin}, OUTPUT);`;
   Blockly.Arduino.customFunctions_['getDistanceCM'] = `
   int getDistanceCM(int trigPin,int echoPin) {
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10); 
-  digitalWrite(trigPin, LOW);
-  int  distance = pulseIn(echoPin, HIGH) / 58; //cm
-  return distance;
+  ${Blockly.Arduino.INDENT}digitalWrite(trigPin, LOW);
+  ${Blockly.Arduino.INDENT}delayMicroseconds(2);
+  ${Blockly.Arduino.INDENT}digitalWrite(trigPin, HIGH);
+  ${Blockly.Arduino.INDENT}delayMicroseconds(10); 
+  ${Blockly.Arduino.INDENT}digitalWrite(trigPin, LOW);
+  ${Blockly.Arduino.INDENT}int distance = pulseIn(echoPin, HIGH) / 58; // 单位：厘米
+  ${Blockly.Arduino.INDENT}if (distance < 2 || distance > 500) {
+  ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}distance = 1000;
+  ${Blockly.Arduino.INDENT}}
+  ${Blockly.Arduino.INDENT}return distance;
   }`;
   var code = `getDistanceCM(${trigPin}, ${echoPin})`;
   return [code, Blockly.Arduino.ORDER_HIGH];
@@ -393,7 +426,8 @@ Blockly.Arduino['scratchstar_GetSoundValue'] = function (block) {
   var port = block.getFieldValue('port');
   var pin = port2pin(port, 3);
   Blockly.Arduino.setups_['GetSoundValue' + pin] = `pinMode(${pin}, INPUT);`;
-  var code = `analogRead(${pin})`;
+  Blockly.Arduino.customFunctions_['FUN_RANGE'] = FUN_RANGE;
+  var code = `mapRange(analogRead(${pin}), 0, 511, 0, 1023)`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
 
@@ -403,7 +437,8 @@ Blockly.Arduino['scratchstar_GrayScale'] = function (block) {
   var pos = block.getFieldValue('secondary');
   var pin = port2pin(port, 3 + (pos - 1));
   Blockly.Arduino.setups_['GrayScale' + pin] = `pinMode(${pin}, INPUT);`;
-  var code = `analogRead(${pin})`;
+  Blockly.Arduino.customFunctions_['FUN_RANGE'] = FUN_RANGE;
+  var code = `mapRange(analogRead(${pin}), 15, 980, 0, 1023)`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
 
@@ -412,7 +447,9 @@ Blockly.Arduino['scratchstar_GetJoystickXValue'] = function (block) {
   var port = block.getFieldValue('port');
   var pin = port2pin(port, 4);
   Blockly.Arduino.setups_['GetJoystickXValue' + pin] = `pinMode(${pin}, INPUT);`;
-  var code = `analogRead(${pin})`;
+  Blockly.Arduino.customFunctions_['FUN_RANGE_JOYSTICK'] = FUN_RANGE_JOYSTICK;
+  Blockly.Arduino.customFunctions_['FUN_RANGE'] = FUN_RANGE;
+  var code = `mapJoystickRange(analogRead(${pin}))`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
 
@@ -420,7 +457,9 @@ Blockly.Arduino['scratchstar_GetJoystickYValue'] = function (block) {
   var port = block.getFieldValue('port');
   var pin = port2pin(port, 3);
   Blockly.Arduino.setups_['GetJoystickYValue' + pin] = `pinMode(${pin}, INPUT);`;
-  var code = `analogRead(${pin})`;
+  Blockly.Arduino.customFunctions_['FUN_RANGE_JOYSTICK'] = FUN_RANGE_JOYSTICK;
+  Blockly.Arduino.customFunctions_['FUN_RANGE'] = FUN_RANGE;
+  var code = `mapJoystickRange(1024 - analogRead(${pin}))`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
 
@@ -443,22 +482,22 @@ Blockly.Arduino['scratchstar_ServoCurrentAngle'] = function (block) {
 
   Blockly.Arduino.customFunctions_['readServoAngle' + port] = `
   union {
-      long longVal;
-      byte byteVal[4];
+  ${Blockly.Arduino.INDENT}long longVal;
+  ${Blockly.Arduino.INDENT}byte byteVal[4];
   } val;
   float readServoAngle${port}() {
-      myWire${port}.beginTransmission(0x7F);
-      myWire${port}.write(0xB0);
-      myWire${port}.requestFrom(0x7F, 10);
-      byte buffer[10];
-      myWire${port}.readBytes(buffer, 10);
-      myWire${port}.endTransmission();
+  ${Blockly.Arduino.INDENT}myWire${port}.beginTransmission(0x7F);
+  ${Blockly.Arduino.INDENT}myWire${port}.write(0xB0);
+  ${Blockly.Arduino.INDENT}myWire${port}.requestFrom(0x7F, 10);
+  ${Blockly.Arduino.INDENT}byte buffer[10];
+  ${Blockly.Arduino.INDENT}myWire${port}.readBytes(buffer, 10);
+  ${Blockly.Arduino.INDENT}myWire${port}.endTransmission();
       
-      val.byteVal[0] = buffer[4];
-      val.byteVal[1] = buffer[3];
-      val.byteVal[2] = buffer[2];
-      val.byteVal[3] = buffer[1];
-      return val.longVal * 0.6;
+  ${Blockly.Arduino.INDENT}val.byteVal[0] = buffer[4];
+  ${Blockly.Arduino.INDENT}val.byteVal[1] = buffer[3];
+  ${Blockly.Arduino.INDENT}val.byteVal[2] = buffer[2];
+  ${Blockly.Arduino.INDENT}val.byteVal[3] = buffer[1];
+  ${Blockly.Arduino.INDENT}return val.longVal * 0.6;
   }`;
  
   var code = `readServoAngle${port}()`;
@@ -473,19 +512,16 @@ Blockly.Arduino['scratchstar_GetReceivedCode'] = function (block) {
   Blockly.Arduino.setups_['IRremote' + port] = `irrecv${port}.enableIRIn();`;
   Blockly.Arduino.customFunctions_['getReceivedCode' + port] = `
   uint32_t getReceivedCode${port}() {
-      if (irrecv${port}.decode()) {
-          uint32_t value = irrecv${port}.decodedIRData.decodedRawData;
-          irrecv${port}.resume();
-          return value;
-      }
-      return 0;
+  ${Blockly.Arduino.INDENT}if (irrecv${port}.decode()) {
+  ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}uint32_t value = irrecv${port}.decodedIRData.decodedRawData;
+  ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}irrecv${port}.resume();
+  ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}return value;
+  ${Blockly.Arduino.INDENT}}
+  ${Blockly.Arduino.INDENT}return 0;
   }`;
   var code = `getReceivedCode${port}()`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
-
-
-
 
 Blockly.Arduino['scratchstar_setRGBLed'] = function (block) {
   const port = block.getFieldValue('port');
@@ -621,17 +657,8 @@ Blockly.Arduino['scratchstar_ServoOutput'] = function (block) {
   return code;
 }
 
+return Blockly;
 
-
-
-
-
-
-
-
-
-
-    return Blockly;
 }
 
 exports = registerGenerators;
