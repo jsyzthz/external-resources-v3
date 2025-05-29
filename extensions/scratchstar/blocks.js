@@ -2,6 +2,15 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 function registerBlocks (Blockly) {
+    const display_color = '#774DCB';
+    const display_secondaryColour = '#9966FF';
+
+    const sensor_color = '#2E8EB8';
+    const sensor_secondaryColour = '#4CBFEF';
+
+    const output_color = '#BD42BD';
+    const output_secondaryColour = '#D65CD6';
+
     function menuPort() {
     return [
 			['端口A', '1'],
@@ -36,7 +45,7 @@ function registerBlocks (Blockly) {
 			['关', '0']
 		]
 	}
-	 
+
 	function menuFillMode(){
 		return [
 			['空心', '1'],
@@ -81,21 +90,21 @@ function registerBlocks (Blockly) {
 
 	// 事件
 
-	Blockly.Blocks['event_scratchstar_begin'] = {
-		/**
-		 * enum of devices uses one pin
-		 * @this Blockly.Block
-		 */
-		init: function () {
-			this.jsonInit({
-				"id": "event_scratchstar_begin",
-				"message0": Blockly.Msg.SCRATCHSTAR_EVENT_BEGIN,
-				"inputsInline": true,
-				"nextStatement": null,
-				"category": Blockly.Categories.event
-			});
-		}
-	};
+	// Blockly.Blocks['event_scratchstar_begin'] = {
+	// 	/**
+	// 	 * enum of devices uses one pin
+	// 	 * @this Blockly.Block
+	// 	 */
+	// 	init: function () {
+	// 		this.jsonInit({
+	// 			"id": "event_scratchstar_begin",
+	// 			"message0": Blockly.Msg.SCRATCHSTAR_EVENT_BEGIN,
+	// 			"inputsInline": true,
+	// 			"nextStatement": null,
+	// 			"category": Blockly.Categories.event
+	// 		});
+	// 	}
+	// };
 
 	//显示
 	Blockly.Blocks['scratchstar_DisplayLEDDigital'] = {
@@ -122,6 +131,8 @@ function registerBlocks (Blockly) {
 						"name": "value"
 					}
 				],
+				"colour": display_color,
+				"secondaryColour": display_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -152,6 +163,8 @@ function registerBlocks (Blockly) {
 						"name": "minvalue"
 					}
 				],
+				"colour": display_color,
+				"secondaryColour": display_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -173,6 +186,8 @@ function registerBlocks (Blockly) {
 						"name": "COLOR"
 					}
 				],
+				"colour": display_color,
+				"secondaryColour": display_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -211,6 +226,8 @@ function registerBlocks (Blockly) {
 						"name": "COLOR"
 					}
 				],
+				"colour": display_color,
+				"secondaryColour": display_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -240,6 +257,8 @@ function registerBlocks (Blockly) {
 						"name": "COLOR"
 					}
 				],
+				"colour": display_color,
+				"secondaryColour": display_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -277,6 +296,8 @@ function registerBlocks (Blockly) {
 						"name": "COLOR"
 					}
 				],
+				"colour": display_color,
+				"secondaryColour": display_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -319,6 +340,8 @@ function registerBlocks (Blockly) {
 						"name": "COLOR"
 					}
 				],
+				"colour": display_color,
+				"secondaryColour": display_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -366,6 +389,8 @@ function registerBlocks (Blockly) {
 						"name": "COLOR"
 					}
 				],
+				"colour": display_color,
+				"secondaryColour": display_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -405,6 +430,8 @@ function registerBlocks (Blockly) {
 						"name": "COLOR"
 					}
 				],
+				"colour": display_color,
+				"secondaryColour": display_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -447,6 +474,8 @@ function registerBlocks (Blockly) {
 						"name": "COLOR"
 					}
 				],
+				"colour": display_color,
+				"secondaryColour": display_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -497,6 +526,8 @@ function registerBlocks (Blockly) {
 						"name": "COLOR"
 					}
 				],
+				"colour": display_color,
+				"secondaryColour": display_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -522,6 +553,8 @@ function registerBlocks (Blockly) {
 						"options": menuPosition()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Boolean",
 				"outputShape": Blockly.OUTPUT_SHAPE_HEXAGONAL
@@ -545,6 +578,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Boolean",
 				"outputShape": Blockly.OUTPUT_SHAPE_HEXAGONAL
@@ -578,6 +613,8 @@ function registerBlocks (Blockly) {
 						]
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Boolean",
 				"outputShape": Blockly.OUTPUT_SHAPE_HEXAGONAL
@@ -601,6 +638,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -624,6 +663,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -651,6 +692,8 @@ function registerBlocks (Blockly) {
 						"name": "threshold"
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Boolean",
 				"outputShape": Blockly.OUTPUT_SHAPE_HEXAGONAL
@@ -674,6 +717,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -697,6 +742,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -720,6 +767,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -743,6 +792,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -766,6 +817,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -797,6 +850,8 @@ function registerBlocks (Blockly) {
 						]
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -820,6 +875,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -843,6 +900,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -866,6 +925,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -889,6 +950,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -912,6 +975,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -940,6 +1005,8 @@ function registerBlocks (Blockly) {
 						"options": menuInfraredKeys()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Boolean",
 				"outputShape": Blockly.OUTPUT_SHAPE_HEXAGONAL
@@ -963,6 +1030,8 @@ function registerBlocks (Blockly) {
 						"options": menuInfraredKeys()
 					}
 				],
+				"colour": sensor_color,
+				"secondaryColour": sensor_secondaryColour,
 				"inputsInline": true,
 				"output": "Number",
 				"outputShape": Blockly.OUTPUT_SHAPE_ROUND
@@ -1004,6 +1073,8 @@ function registerBlocks (Blockly) {
 						"name": "blue"
 					}
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -1031,6 +1102,8 @@ function registerBlocks (Blockly) {
 						"options": menuLedStatus()
 					},
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -1054,6 +1127,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -1077,6 +1152,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -1104,6 +1181,8 @@ function registerBlocks (Blockly) {
 						"name": "value"
 					},
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -1166,6 +1245,8 @@ function registerBlocks (Blockly) {
 						]
 					}
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -1193,6 +1274,8 @@ function registerBlocks (Blockly) {
 						"name": "code"
 					},
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -1221,6 +1304,8 @@ function registerBlocks (Blockly) {
 						"name": "speed"
 					},
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -1248,6 +1333,8 @@ function registerBlocks (Blockly) {
 						"name": "speed"
 					},
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -1270,6 +1357,8 @@ function registerBlocks (Blockly) {
 						"options": menuPort()
 					}
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -1301,6 +1390,8 @@ function registerBlocks (Blockly) {
 						"name": "speed"
 					}
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
@@ -1332,6 +1423,8 @@ function registerBlocks (Blockly) {
 						"name": "speed"
 					}
 				],
+				"colour": output_color,
+				"secondaryColour": output_secondaryColour,
 				"inputsInline": true,
 				"previousStatement": null,
 				"nextStatement": null
