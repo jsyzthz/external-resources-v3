@@ -527,6 +527,32 @@ ${Blockly.Arduino.INDENT}return 0;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
 
+Blockly.Arduino['scratchstar_RemotePressed'] = function (block) {
+    var port = block.getFieldValue('port');
+    var key = block.getFieldValue('key');
+    var pin = port2pin(port, 1);
+    Blockly.Arduino.includes_["IRremote"] = '#include <IRremote.h>';
+    Blockly.Arduino.definitions_["IRremote"+port] = `IRrecv irrecv${port}(${pin});`;
+    Blockly.Arduino.setups_['IRremote' + port] = `irrecv${port}.enableIRIn();`;
+
+    Blockly.Arduino.customFunctions_['getReceivedCode' + port] = `
+    uint32_t getReceivedCode${port}() {
+    ${Blockly.Arduino.INDENT}if (irrecv${port}.decode()) {
+    ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}uint32_t value = irrecv${port}.decodedIRData.decodedRawData;
+    ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}irrecv${port}.resume();
+    ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}return value;
+    ${Blockly.Arduino.INDENT}}
+    ${Blockly.Arduino.INDENT}return 0;
+    }\n`.replace(/^ {4}/gm, '');
+    var code = `getReceivedCode${port}() == ${key}`;
+    return [code, Blockly.Arduino.ORDER_HIGH];
+}
+
+Blockly.Arduino['scratchstar_GetRemoteCode'] = function (block) {
+    var key = block.getFieldValue('key');
+    return [key, Blockly.Arduino.ORDER_HIGH];
+}
+
 Blockly.Arduino['scratchstar_setRGBLed'] = function (block) {
   const port = block.getFieldValue('port');
   const index = block.getFieldValue('index');
