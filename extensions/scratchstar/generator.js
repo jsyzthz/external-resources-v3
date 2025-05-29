@@ -12,6 +12,25 @@ const CHIP_IO = [
     [0x18, 0x17, 0x16],
 ];
 
+function port2pin(port, index) {
+    return CHIP_IO[parseInt(port) - 1][parseInt(index) - 1];
+}
+
+function hexToRgb(hex) {
+  // Remove the # if present
+  hex = hex.replace('#', '');
+
+  // Parse the hex values to get r, g, b components
+  var r = parseInt(hex.substring(0, 2), 16);
+  var g = parseInt(hex.substring(2, 4), 16);
+  var b = parseInt(hex.substring(4, 6), 16);
+
+  return {r: r, g: g, b: b};
+}
+
+
+
+function registerGenerators(Blockly) {
 
 const FUN_RANGE=`
 int mapRange(int input, int inputMin, int inputMax, int outputMin, int outputMax) {
@@ -41,26 +60,6 @@ ${Blockly.Arduino.INDENT}}
 ${Blockly.Arduino.INDENT}return 0;
 }
 `
-
-function port2pin(port, index) {
-    return CHIP_IO[parseInt(port) - 1][parseInt(index) - 1];
-}
-
-function hexToRgb(hex) {
-  // Remove the # if present
-  hex = hex.replace('#', '');
-  
-  // Parse the hex values to get r, g, b components
-  var r = parseInt(hex.substring(0, 2), 16);
-  var g = parseInt(hex.substring(2, 4), 16);
-  var b = parseInt(hex.substring(4, 6), 16);
-  
-  return {r: r, g: g, b: b};
-}
-
-
-
-function registerGenerators(Blockly) {
     //自定义积木生成代码
 
     //四位数码管
@@ -96,7 +95,7 @@ Blockly.Arduino['scratchstar_DisplayLEDTimeDigital'] = function (block) {
   const clk = port2pin(port, 1) //这里的1是表示每个TYPE-C有多个引脚，这里的表示每个TYPEC引脚中的第一个引脚
   const dio = port2pin(port, 2) //这里的2是表示每个TYPE-C有多个引脚，这里的表示每个TYPEC引脚中的第二个引脚
   Blockly.Arduino.includes_["SevenSegmentTM1637"] = "#include <SevenSegmentTM1637.h>\n#include <SevenSegmentExtended.h>";
-  
+
   Blockly.Arduino.definitions_["SevenSegmentTM1637" + port] = `SevenSegmentExtended segmentDisplay${port}(${clk}, ${dio});`;
 
   Blockly.Arduino.setups_['SevenSegmentTM1637' + port] = `segmentDisplay${port}.begin();`;
@@ -112,7 +111,7 @@ Blockly.Arduino['scratchstar_ClearTFT'] = function (block) {
   var rgbColor = hexToRgb(colour);
 
   Blockly.Arduino.includes_["TFT"] = "#include <U8g2lib.h>\n#include <Arduino_GFX_Library.h>";
-  
+
   Blockly.Arduino.definitions_["TFT"] = "Arduino_DataBus *bus = new Arduino_HWSPI(25 /* DC */, 26 /* CS */);\nArduino_GFX *gfx = new Arduino_ST7789(bus, 27 /* RST */, 0 /* rotation */);";
 
   Blockly.Arduino.setups_['TFT'] = "gfx->begin();\n  gfx->invertDisplay(true);";
@@ -128,12 +127,12 @@ Blockly.Arduino['scratchstar_DrawText'] = function (block) {
   var text = Blockly.Arduino.valueToCode(block, 'text', order);
   var size = block.getFieldValue('size');
   var colour = Blockly.Arduino.valueToCode(block, 'COLOR', Blockly.Arduino.ORDER_NONE);
-  
+
   // Convert hex color to RGB
   var rgbColor = hexToRgb(colour);
-  
+
   Blockly.Arduino.includes_["TFT"] = "#include <U8g2lib.h>\n#include <Arduino_GFX_Library.h>";
-  
+
   Blockly.Arduino.definitions_["TFT"] = "Arduino_DataBus *bus = new Arduino_HWSPI(25 /* DC */, 26 /* CS */);\nArduino_GFX *gfx = new Arduino_ST7789(bus, 27 /* RST */, 0 /* rotation */);";
 
   Blockly.Arduino.setups_['TFT'] = "gfx->begin();\n  gfx->invertDisplay(true);";
@@ -141,7 +140,7 @@ Blockly.Arduino['scratchstar_DrawText'] = function (block) {
   var code = `gfx->setTextSize(${size});\n`+
   `gfx->setTextColor(RGB565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`+
   `gfx->setCursor(${x}, (319 - ${y}));\n`+
-  `gfx->print(${text});\n`; 
+  `gfx->print(${text});\n`;
   return code;
 }
 //画点
@@ -149,16 +148,16 @@ Blockly.Arduino['scratchstar_DrawPixel'] = function (block) {
   var x = Blockly.Arduino.valueToCode(block, 'x', Blockly.Arduino.ORDER_NONE);
   var y = Blockly.Arduino.valueToCode(block, 'y', Blockly.Arduino.ORDER_NONE);
   var colour = Blockly.Arduino.valueToCode(block, 'COLOR', Blockly.Arduino.ORDER_NONE);
-  
+
   // Convert hex color to RGB
   var rgbColor = hexToRgb(colour);
-  
+
   Blockly.Arduino.includes_["TFT"] = "#include <U8g2lib.h>\n#include <Arduino_GFX_Library.h>";
-  
+
   Blockly.Arduino.definitions_["TFT"] = "Arduino_DataBus *bus = new Arduino_HWSPI(25 /* DC */, 26 /* CS */);\nArduino_GFX *gfx = new Arduino_ST7789(bus, 27 /* RST */, 0 /* rotation */);";
 
   Blockly.Arduino.setups_['TFT'] = "gfx->begin();\n  gfx->invertDisplay(true);";
-  
+
   return `gfx->drawPixel(${x}, (319 - ${y}), RGB565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
 }
 //画线
@@ -168,16 +167,16 @@ Blockly.Arduino['scratchstar_DrawLine'] = function (block) {
   var ex = Blockly.Arduino.valueToCode(block, 'ex', Blockly.Arduino.ORDER_NONE);
   var ey = Blockly.Arduino.valueToCode(block, 'ey', Blockly.Arduino.ORDER_NONE);
   var colour = Blockly.Arduino.valueToCode(block, 'COLOR', Blockly.Arduino.ORDER_NONE);
-  
+
   // Convert hex color to RGB
   var rgbColor = hexToRgb(colour);
-  
+
   Blockly.Arduino.includes_["TFT"] = "#include <U8g2lib.h>\n#include <Arduino_GFX_Library.h>";
-  
+
   Blockly.Arduino.definitions_["TFT"] = "Arduino_DataBus *bus = new Arduino_HWSPI(25 /* DC */, 26 /* CS */);\nArduino_GFX *gfx = new Arduino_ST7789(bus, 27 /* RST */, 0 /* rotation */);";
 
   Blockly.Arduino.setups_['TFT'] = "gfx->begin();\n  gfx->invertDisplay(true);";
-  
+
   return `gfx->drawLine(${sx}, (319 - ${sy}), ${ex}, (319 - ${ey}), RGB565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
 }
 //画矩形
@@ -188,16 +187,16 @@ Blockly.Arduino['scratchstar_DrawRect'] = function (block) {
   var width = Blockly.Arduino.valueToCode(block, 'width', Blockly.Arduino.ORDER_NONE);
   var height = Blockly.Arduino.valueToCode(block, 'height', Blockly.Arduino.ORDER_NONE);
   var colour = Blockly.Arduino.valueToCode(block, 'COLOR', Blockly.Arduino.ORDER_NONE);
-  
+
   // Convert hex color to RGB
   var rgbColor = hexToRgb(colour);
-  
+
   Blockly.Arduino.includes_["TFT"] = "#include <U8g2lib.h>\n#include <Arduino_GFX_Library.h>";
-  
+
   Blockly.Arduino.definitions_["TFT"] = "Arduino_DataBus *bus = new Arduino_HWSPI(25 /* DC */, 26 /* CS */);\nArduino_GFX *gfx = new Arduino_ST7789(bus, 27 /* RST */, 0 /* rotation */);";
 
   Blockly.Arduino.setups_['TFT'] = "gfx->begin();\n  gfx->invertDisplay(true);";
-  
+
   // Check if filled or outline
   if (mode === '1') { // Outline
       return `gfx->drawRect(${sx}, (319 - ${sy}), ${width}, ${height}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
@@ -214,16 +213,16 @@ Blockly.Arduino['scratchstar_DrawRoundRect'] = function (block) {
   var height = Blockly.Arduino.valueToCode(block, 'height', Blockly.Arduino.ORDER_NONE);
   var radius = Blockly.Arduino.valueToCode(block, 'radius', Blockly.Arduino.ORDER_NONE);
   var colour = Blockly.Arduino.valueToCode(block, 'COLOR', Blockly.Arduino.ORDER_NONE);
-  
+
   // Convert hex color to RGB
   var rgbColor = hexToRgb(colour);
-  
+
   Blockly.Arduino.includes_["TFT"] = "#include <U8g2lib.h>\n#include <Arduino_GFX_Library.h>";
-  
+
   Blockly.Arduino.definitions_["TFT"] = "Arduino_DataBus *bus = new Arduino_HWSPI(25 /* DC */, 26 /* CS */);\nArduino_GFX *gfx = new Arduino_ST7789(bus, 27 /* RST */, 0 /* rotation */);";
 
   Blockly.Arduino.setups_['TFT'] = "gfx->begin();\n  gfx->invertDisplay(true);";
-  
+
   // Check if filled or outline
   if (mode === '1') { // Outline
     return `gfx->drawRoundRect(${sx}, (319 - ${sy}), ${width}, ${height}, ${radius}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
@@ -238,16 +237,16 @@ Blockly.Arduino['scratchstar_DrawCircle'] = function (block) {
   var cy = Blockly.Arduino.valueToCode(block, 'cy', Blockly.Arduino.ORDER_NONE);
   var radius = Blockly.Arduino.valueToCode(block, 'radius', Blockly.Arduino.ORDER_NONE);
   var colour = Blockly.Arduino.valueToCode(block, 'COLOR', Blockly.Arduino.ORDER_NONE);
-  
+
   // Convert hex color to RGB
   var rgbColor = hexToRgb(colour);
-  
+
   Blockly.Arduino.includes_["TFT"] = "#include <U8g2lib.h>\n#include <Arduino_GFX_Library.h>";
-  
+
   Blockly.Arduino.definitions_["TFT"] = "Arduino_DataBus *bus = new Arduino_HWSPI(25 /* DC */, 26 /* CS */);\nArduino_GFX *gfx = new Arduino_ST7789(bus, 27 /* RST */, 0 /* rotation */);";
 
   Blockly.Arduino.setups_['TFT'] = "gfx->begin();\n  gfx->invertDisplay(true);";
-  
+
   // Check if filled or outline
   if (mode === '1') { // Outline
     return `gfx->drawCircle(${cx}, (319 - ${cy}), ${radius}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
@@ -263,16 +262,16 @@ Blockly.Arduino['scratchstar_DrawEllipse'] = function (block) {
   var longaxis = Blockly.Arduino.valueToCode(block, 'longaxis', Blockly.Arduino.ORDER_NONE);
   var shortaxis = Blockly.Arduino.valueToCode(block, 'shortaxis', Blockly.Arduino.ORDER_NONE);
   var colour = Blockly.Arduino.valueToCode(block, 'COLOR', Blockly.Arduino.ORDER_NONE);
-  
+
   // Convert hex color to RGB
   var rgbColor = hexToRgb(colour);
-  
+
   Blockly.Arduino.includes_["TFT"] = "#include <U8g2lib.h>\n#include <Arduino_GFX_Library.h>";
-  
+
   Blockly.Arduino.definitions_["TFT"] = "Arduino_DataBus *bus = new Arduino_HWSPI(25 /* DC */, 26 /* CS */);\nArduino_GFX *gfx = new Arduino_ST7789(bus, 27 /* RST */, 0 /* rotation */);";
 
   Blockly.Arduino.setups_['TFT'] = "gfx->begin();\n  gfx->invertDisplay(true);";
-  
+
   // Check if filled or outline
   if (mode === '1') { // Outline
     return `gfx->drawEllipse(${cx}, (319 - ${cy}), ${longaxis}, ${shortaxis}, gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
@@ -290,16 +289,16 @@ Blockly.Arduino['scratchstar_DrawTriangle'] = function (block) {
   var cx = Blockly.Arduino.valueToCode(block, 'cx', Blockly.Arduino.ORDER_NONE);
   var cy = Blockly.Arduino.valueToCode(block, 'cy', Blockly.Arduino.ORDER_NONE);
   var colour = Blockly.Arduino.valueToCode(block, 'COLOR', Blockly.Arduino.ORDER_NONE);
-  
+
   // Convert hex color to RGB
   var rgbColor = hexToRgb(colour);
-  
+
   Blockly.Arduino.includes_["TFT"] = "#include <U8g2lib.h>\n#include <Arduino_GFX_Library.h>";
-  
+
   Blockly.Arduino.definitions_["TFT"] = "Arduino_DataBus *bus = new Arduino_HWSPI(25 /* DC */, 26 /* CS */);\nArduino_GFX *gfx = new Arduino_ST7789(bus, 27 /* RST */, 0 /* rotation */);";
 
   Blockly.Arduino.setups_['TFT'] = "gfx->begin();\n  gfx->invertDisplay(true);";
-  
+
   // Check if filled or outline
   if (mode === '1') { // Outline
     return `gfx->drawTriangle(${ax}, ${ay}, ${bx}, (319 - ${by}), ${cx}, (319 - ${cy}), gfx->color565(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}));\n`;
@@ -343,18 +342,18 @@ Blockly.Arduino['scratchstar_GetUltrasonic'] = function (block) {
   Blockly.Arduino.setups_['GetUltrasonic' + echoPin] = `pinMode(${echoPin}, INPUT);`;
   Blockly.Arduino.setups_['GetUltrasonic' + trigPin] = `pinMode(${trigPin}, OUTPUT);`;
   Blockly.Arduino.customFunctions_['getDistanceCM'] = `
-  int getDistanceCM(int trigPin,int echoPin) {
-  ${Blockly.Arduino.INDENT}digitalWrite(trigPin, LOW);
-  ${Blockly.Arduino.INDENT}delayMicroseconds(2);
-  ${Blockly.Arduino.INDENT}digitalWrite(trigPin, HIGH);
-  ${Blockly.Arduino.INDENT}delayMicroseconds(10); 
-  ${Blockly.Arduino.INDENT}digitalWrite(trigPin, LOW);
-  ${Blockly.Arduino.INDENT}int distance = pulseIn(echoPin, HIGH) / 58; // 单位：厘米
-  ${Blockly.Arduino.INDENT}if (distance < 2 || distance > 500) {
-  ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}distance = 1000;
-  ${Blockly.Arduino.INDENT}}
-  ${Blockly.Arduino.INDENT}return distance;
-  }`;
+int getDistanceCM(int trigPin,int echoPin) {
+${Blockly.Arduino.INDENT}digitalWrite(trigPin, LOW);
+${Blockly.Arduino.INDENT}delayMicroseconds(2);
+${Blockly.Arduino.INDENT}digitalWrite(trigPin, HIGH);
+${Blockly.Arduino.INDENT}delayMicroseconds(10);
+${Blockly.Arduino.INDENT}digitalWrite(trigPin, LOW);
+${Blockly.Arduino.INDENT}int distance = pulseIn(echoPin, HIGH) / 58; // 单位：厘米
+${Blockly.Arduino.INDENT}if (distance < 2 || distance > 500) {
+${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}distance = 1000;
+${Blockly.Arduino.INDENT}}
+${Blockly.Arduino.INDENT}return distance;
+}`;
   var code = `getDistanceCM(${trigPin}, ${echoPin})`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
@@ -431,7 +430,7 @@ Blockly.Arduino['scratchstar_GetSoundValue'] = function (block) {
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
 
-//灰度  
+//灰度
 Blockly.Arduino['scratchstar_GrayScale'] = function (block) {
   var port = block.getFieldValue('port');
   var pos = block.getFieldValue('secondary');
@@ -481,25 +480,25 @@ Blockly.Arduino['scratchstar_ServoCurrentAngle'] = function (block) {
   Blockly.Arduino.setups_['Servo' + port] = `myWire${port}.begin();\nmyWire${port}.setClock(80L * 1000L);`;
 
   Blockly.Arduino.customFunctions_['readServoAngle' + port] = `
-  union {
-  ${Blockly.Arduino.INDENT}long longVal;
-  ${Blockly.Arduino.INDENT}byte byteVal[4];
-  } val;
-  float readServoAngle${port}() {
-  ${Blockly.Arduino.INDENT}myWire${port}.beginTransmission(0x7F);
-  ${Blockly.Arduino.INDENT}myWire${port}.write(0xB0);
-  ${Blockly.Arduino.INDENT}myWire${port}.requestFrom(0x7F, 10);
-  ${Blockly.Arduino.INDENT}byte buffer[10];
-  ${Blockly.Arduino.INDENT}myWire${port}.readBytes(buffer, 10);
-  ${Blockly.Arduino.INDENT}myWire${port}.endTransmission();
-      
-  ${Blockly.Arduino.INDENT}val.byteVal[0] = buffer[4];
-  ${Blockly.Arduino.INDENT}val.byteVal[1] = buffer[3];
-  ${Blockly.Arduino.INDENT}val.byteVal[2] = buffer[2];
-  ${Blockly.Arduino.INDENT}val.byteVal[3] = buffer[1];
-  ${Blockly.Arduino.INDENT}return val.longVal * 0.6;
-  }`;
- 
+union {
+${Blockly.Arduino.INDENT}long longVal;
+${Blockly.Arduino.INDENT}byte byteVal[4];
+} val;
+float readServoAngle${port}() {
+${Blockly.Arduino.INDENT}myWire${port}.beginTransmission(0x7F);
+${Blockly.Arduino.INDENT}myWire${port}.write(0xB0);
+${Blockly.Arduino.INDENT}myWire${port}.requestFrom(0x7F, 10);
+${Blockly.Arduino.INDENT}byte buffer[10];
+${Blockly.Arduino.INDENT}myWire${port}.readBytes(buffer, 10);
+${Blockly.Arduino.INDENT}myWire${port}.endTransmission();
+
+${Blockly.Arduino.INDENT}val.byteVal[0] = buffer[4];
+${Blockly.Arduino.INDENT}val.byteVal[1] = buffer[3];
+${Blockly.Arduino.INDENT}val.byteVal[2] = buffer[2];
+${Blockly.Arduino.INDENT}val.byteVal[3] = buffer[1];
+${Blockly.Arduino.INDENT}return val.longVal * 0.6;
+}`;
+
   var code = `readServoAngle${port}()`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
@@ -511,14 +510,14 @@ Blockly.Arduino['scratchstar_GetReceivedCode'] = function (block) {
   Blockly.Arduino.definitions_["IRremote"+port] = `IRrecv irrecv${port}(${pin});`;
   Blockly.Arduino.setups_['IRremote' + port] = `irrecv${port}.enableIRIn();`;
   Blockly.Arduino.customFunctions_['getReceivedCode' + port] = `
-  uint32_t getReceivedCode${port}() {
-  ${Blockly.Arduino.INDENT}if (irrecv${port}.decode()) {
-  ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}uint32_t value = irrecv${port}.decodedIRData.decodedRawData;
-  ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}irrecv${port}.resume();
-  ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}return value;
-  ${Blockly.Arduino.INDENT}}
-  ${Blockly.Arduino.INDENT}return 0;
-  }`;
+uint32_t getReceivedCode${port}() {
+${Blockly.Arduino.INDENT}if (irrecv${port}.decode()) {
+${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}uint32_t value = irrecv${port}.decodedIRData.decodedRawData;
+${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}irrecv${port}.resume();
+${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}return value;
+${Blockly.Arduino.INDENT}}
+${Blockly.Arduino.INDENT}return 0;
+}`;
   var code = `getReceivedCode${port}()`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
@@ -624,7 +623,7 @@ Blockly.Arduino['scratchstar_ServoOutCircle'] = function (block) {
   const circle1Hex= '0x'+(circle & 0xFF).toString(16)
   const circle2Hex= '0x'+(circle >> 8 & 0xFF).toString(16)
 
-  
+
   Blockly.Arduino.includes_["SoftwareWire"] = '#include <SoftwareWire.h>';
   Blockly.Arduino.definitions_[`ServoDefin${port}`] = `SoftwareWire myWire${port}(${pin2}, ${pin1});`;
   Blockly.Arduino.setups_[`ServoSetup${port}`] = `myWire${port}.begin();\n${Blockly.Arduino.INDENT}myWire${port}.setClock(80L * 1000L);\n`;
@@ -646,7 +645,7 @@ Blockly.Arduino['scratchstar_ServoOutput'] = function (block) {
   const sppedHex='0x' + speed.toString(16)
   const angle1Hex= '0x'+(angle & 0xFF).toString(16)
   const angle2Hex= '0x'+(angle >> 8 & 0xFF).toString(16)
-  
+
   Blockly.Arduino.includes_["SoftwareWire"] = '#include <SoftwareWire.h>';
   Blockly.Arduino.definitions_[`ServoDefin${port}`] = `SoftwareWire myWire${port}(${pin2}, ${pin1});`;
   Blockly.Arduino.setups_[`ServoSetup${port}`] = `myWire${port}.begin();\n${Blockly.Arduino.INDENT}myWire${port}.setClock(80L * 1000L);\n`;
