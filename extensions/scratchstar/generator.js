@@ -43,6 +43,7 @@ ${Blockly.Arduino.INDENT}int denominator = inputMax - inputMin;
 ${Blockly.Arduino.INDENT}int output = numerator / denominator + outputMin;
 ${Blockly.Arduino.INDENT}return output;
 }
+
 `
 const FUN_RANGE_JOYSTICK=`
 int mapJoystickRange(int data) {
@@ -59,6 +60,7 @@ ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}return -(101 - mapRange(data, 
 ${Blockly.Arduino.INDENT}}
 ${Blockly.Arduino.INDENT}return 0;
 }
+
 `
     //自定义积木生成代码
 
@@ -353,7 +355,8 @@ ${Blockly.Arduino.INDENT}if (distance < 2 || distance > 500) {
 ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}distance = 1000;
 ${Blockly.Arduino.INDENT}}
 ${Blockly.Arduino.INDENT}return distance;
-}`;
+}
+`;
   var code = `getDistanceCM(${trigPin}, ${echoPin})`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
@@ -497,7 +500,8 @@ ${Blockly.Arduino.INDENT}val.byteVal[1] = buffer[3];
 ${Blockly.Arduino.INDENT}val.byteVal[2] = buffer[2];
 ${Blockly.Arduino.INDENT}val.byteVal[3] = buffer[1];
 ${Blockly.Arduino.INDENT}return val.longVal * 0.6;
-}`;
+}
+`;
 
   var code = `readServoAngle${port}()`;
   return [code, Blockly.Arduino.ORDER_HIGH];
@@ -517,7 +521,8 @@ ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}irrecv${port}.resume();
 ${Blockly.Arduino.INDENT}${Blockly.Arduino.INDENT}return value;
 ${Blockly.Arduino.INDENT}}
 ${Blockly.Arduino.INDENT}return 0;
-}`;
+}
+`;
   var code = `getReceivedCode${port}()`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
