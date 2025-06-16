@@ -63,6 +63,13 @@ ${Blockly.Arduino.INDENT}return 0;
 
 `
     //自定义积木生成代码
+    Blockly.Arduino['scratchstar_turnLed'] = function (block) {
+        const port = block.getFieldValue('port')
+        const status = parseInt(block.getFieldValue('status'))
+        const pin = port2pin(port, 1) //这里的1是表示每个TYPE-C有多个引脚，这里的表示每个TYPEC引脚中的第一个引脚
+        Blockly.Arduino.setups_['turnled' + port] = `pinMode(${pin}, OUTPUT);`;
+        return `digitalWrite(${pin}, ${status === 1 ? 'HIGH' : 'LOW'});\n`;
+    }
 
     //四位数码管
     Blockly.Arduino["scratchstar_DisplayLEDDigital"] = function (block) {
@@ -645,45 +652,54 @@ Blockly.Arduino['scratchstar_MotorStop'] = function (block) {
 
 Blockly.Arduino['scratchstar_ServoOutCircle'] = function (block) {
   const port = block.getFieldValue('port')
-  const circle =  Blockly.Arduino.valueToCode(block, 'circle', Blockly.Arduino.ORDER_NONE);
-  const speed =  Blockly.Arduino.valueToCode(block, 'speed', Blockly.Arduino.ORDER_NONE);
-  const direction= circle<0?'0x02':'0x01'
+  const angle = Blockly.Arduino.valueToCode(block, 'angle', Blockly.Arduino.ORDER_NONE);
+  const speed = Blockly.Arduino.valueToCode(block, 'speed', Blockly.Arduino.ORDER_NONE);
+  const direction = angle < 0 ? '0x02' : '0x01'
   const pin1 = port2pin(port, 1)
   const pin2 = port2pin(port, 2)
-  const sppedHex='0x' + speed.toString(16)
-  const circle1Hex= '0x'+(circle & 0xFF).toString(16)
-  const circle2Hex= '0x'+(circle >> 8 & 0xFF).toString(16)
-
+  const absAngle = Math.abs(angle);
 
   Blockly.Arduino.includes_["SoftwareWire"] = '#include <SoftwareWire.h>';
   Blockly.Arduino.definitions_[`ServoDefin${port}`] = `SoftwareWire myWire${port}(${pin2}, ${pin1});`;
+
+
+  Blockly.Arduino.customFunctions_['runServoAngle'] = `
+  void runServoAngle(SoftwareWire &wire, uint8_t direction, int angle, uint8_t speed) {
+  ${Blockly.Arduino.INDENT}wire.beginTransmission(0x7F);
+  ${Blockly.Arduino.INDENT}byte cmd[] = {0xA0, 0x02, direction, 0x01, speed, 0x00, 0x00, (angle >> 8) & 0xFF, angle & 0xFF};
+  ${Blockly.Arduino.INDENT}wire.write(cmd, sizeof(cmd));
+  ${Blockly.Arduino.INDENT}wire.endTransmission();
+  }\n`.replace(/^ {4}/gm, '');
+
   Blockly.Arduino.setups_[`ServoSetup${port}`] = `myWire${port}.begin();\n${Blockly.Arduino.INDENT}myWire${port}.setClock(80L * 1000L);\n`;
-  var code=`myWire${port}.beginTransmission(0x7F);\n`
-  code+=`byte cmdCircle${port}[9]={0xA0, 0x01, ${direction}, 0x01, ${sppedHex}, ${circle2Hex}, ${circle1Hex}, 0x00, 0x00};\n`
-  code+=`myWire${port}.write(cmdCircle${port}, 9);\n`
-  code+=`myWire${port}.endTransmission();\n`
+  var code = `runServoAngle(myWire${port}, ${direction}, ${absAngle}, ${speed});\n`
   return code;
 }
 
 
 Blockly.Arduino['scratchstar_ServoOutput'] = function (block) {
   const port = block.getFieldValue('port')
-  const angle =  Blockly.Arduino.valueToCode(block, 'angle', Blockly.Arduino.ORDER_NONE);
-  const speed =  Blockly.Arduino.valueToCode(block, 'speed', Blockly.Arduino.ORDER_NONE);
-  const direction= angle<0?'0x02':'0x01'
+  const angle = Blockly.Arduino.valueToCode(block, 'angle', Blockly.Arduino.ORDER_NONE);
+  const speed = Blockly.Arduino.valueToCode(block, 'speed', Blockly.Arduino.ORDER_NONE);
+  const direction = angle < 0 ? '0x02' : '0x01'
   const pin1 = port2pin(port, 1)
   const pin2 = port2pin(port, 2)
-  const sppedHex='0x' + speed.toString(16)
-  const angle1Hex= '0x'+(angle & 0xFF).toString(16)
-  const angle2Hex= '0x'+(angle >> 8 & 0xFF).toString(16)
+  const absAngle = Math.abs(angle);
 
   Blockly.Arduino.includes_["SoftwareWire"] = '#include <SoftwareWire.h>';
   Blockly.Arduino.definitions_[`ServoDefin${port}`] = `SoftwareWire myWire${port}(${pin2}, ${pin1});`;
+
+
+  Blockly.Arduino.customFunctions_['runServoAngle'] = `
+  void runServoAngle(SoftwareWire &wire, uint8_t direction, int angle, uint8_t speed) {
+  ${Blockly.Arduino.INDENT}wire.beginTransmission(0x7F);
+  ${Blockly.Arduino.INDENT}byte cmd[] = {0xA0, 0x02, direction, 0x01, speed, 0x00, 0x00, (angle >> 8) & 0xFF, angle & 0xFF};
+  ${Blockly.Arduino.INDENT}wire.write(cmd, sizeof(cmd));
+  ${Blockly.Arduino.INDENT}wire.endTransmission();
+  }\n`.replace(/^ {4}/gm, '');
+
   Blockly.Arduino.setups_[`ServoSetup${port}`] = `myWire${port}.begin();\n${Blockly.Arduino.INDENT}myWire${port}.setClock(80L * 1000L);\n`;
-  var code=`myWire${port}.beginTransmission(0x7F);\n`
-  code+=`byte cmdAngle${port}[9]={0xA0, 0x02, ${direction}, 0x01, ${sppedHex}, 0x00, 0x00, ${angle2Hex}, ${angle1Hex}};\n`
-  code+=`myWire${port}.write(cmdAngle${port}, 9);\n`
-  code+=`myWire${port}.endTransmission();\n`
+  var code = `runServoAngle(myWire${port}, ${direction}, ${absAngle}, ${speed});\n`
   return code;
 }
 

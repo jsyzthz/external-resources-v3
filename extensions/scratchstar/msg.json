@@ -2,7 +2,7 @@
     "SCRATCHSTAR_CATEGORY_DISPLAY": "显示",
     "SCRATCHSTAR_CATEGORY_SENSOR": "传感器",
     "SCRATCHSTAR_CATEGORY_OUTPUT": "输出",
-     "SCRATCHSTAR_EVENT_BEGIN":"Scratch Star主程序",
+    "SCRATCHSTAR_EVENT_BEGIN":"Scratch Star主程序",
     "SCRATCHSTAR_DISPLAY_LED_DIGITAL":"四位数码管显示（0000） %1 %2",
     "SCRATCHSTAR_DISPLAY_LED_TIME_DIGITAL":"四位数码管显示(00:00) %1 %2:%3",
     "SCRATCHSTAR_CLEAR_TFT":"清除屏幕并设置背景颜色为 %1",
@@ -43,6 +43,6 @@
     "SCRATCHSTAR_MOTOR_FORWARD":"直流电机 %1 正转，速度为 %2",
     "SCRATCHSTAR_MOTOR_BACKWARD":"直流电机 %1 反转，速度为 %2",
     "SCRATCHSTAR_MOTOR_STOP":"直流电机 %1 停转",
-    "SCRATCHSTAR_SERVO_OUT_CIRCLE":"伺服电机 %1 输出角度 %2 速度 %3",
-    "SCRATCHSTAR_SERVO_OUTPUT":"伺服电机 %1 转 %2 圈 速度 %3"
+    "SCRATCHSTAR_SERVO_OUT_CIRCLE":"伺服电机 %1 转 %2 圈 速度 %3",
+    "SCRATCHSTAR_SERVO_OUTPUT":"伺服电机 %1 输出角度 %2 速度 %3"
 }
