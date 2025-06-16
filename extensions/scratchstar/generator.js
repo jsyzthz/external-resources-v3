@@ -373,7 +373,8 @@ Blockly.Arduino['scratchstar_IRAvoidance'] = function (block) {
   var port = block.getFieldValue('port');
   var pin = port2pin(port, 3);
   Blockly.Arduino.setups_['IRAvoidance' + pin] = `pinMode(${pin}, INPUT);`;
-  var code = `analogRead(${pin})`;
+  Blockly.Arduino.customFunctions_['FUN_RANGE'] = FUN_RANGE;
+  var code = `mapRange(analogRead(${pin}), 33, 900, 0, 1023)`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
 
@@ -381,8 +382,9 @@ Blockly.Arduino['scratchstar_isAvoidanceDetected'] = function (block) {
   var port = block.getFieldValue('port');
   var threshold = Blockly.Arduino.valueToCode(block, 'threshold', Blockly.Arduino.ORDER_NONE);
   var pin = port2pin(port, 3);
-  Blockly.Arduino.setups_['isAvoidanceDetected' + pin] = `pinMode(${pin}, INPUT);`;
-  var code = `analogRead(${pin}) < ${threshold}`;
+  Blockly.Arduino.setups_['IRAvoidance' + pin] = `pinMode(${pin}, INPUT);`;
+  Blockly.Arduino.customFunctions_['FUN_RANGE'] = FUN_RANGE;
+  var code = `mapRange(analogRead(${pin}), 33, 900, 0, 1023) < ${threshold}`;
   return [code, Blockly.Arduino.ORDER_HIGH];
 }
 
@@ -669,7 +671,7 @@ Blockly.Arduino['scratchstar_ServoOutCircle'] = function (block) {
   ${Blockly.Arduino.INDENT}byte cmd[] = {0xA0, 0x02, direction, 0x01, speed, 0x00, 0x00, (angle >> 8) & 0xFF, angle & 0xFF};
   ${Blockly.Arduino.INDENT}wire.write(cmd, sizeof(cmd));
   ${Blockly.Arduino.INDENT}wire.endTransmission();
-  }\n`.replace(/^ {4}/gm, '');
+  }\n`.replace(/^ {2}/gm, '');
 
   Blockly.Arduino.setups_[`ServoSetup${port}`] = `myWire${port}.begin();\n${Blockly.Arduino.INDENT}myWire${port}.setClock(80L * 1000L);\n`;
   var code = `runServoAngle(myWire${port}, ${direction}, ${absAngle}, ${speed});\n`
@@ -696,7 +698,7 @@ Blockly.Arduino['scratchstar_ServoOutput'] = function (block) {
   ${Blockly.Arduino.INDENT}byte cmd[] = {0xA0, 0x02, direction, 0x01, speed, 0x00, 0x00, (angle >> 8) & 0xFF, angle & 0xFF};
   ${Blockly.Arduino.INDENT}wire.write(cmd, sizeof(cmd));
   ${Blockly.Arduino.INDENT}wire.endTransmission();
-  }\n`.replace(/^ {4}/gm, '');
+  }\n`.replace(/^ {2}/gm, '');
 
   Blockly.Arduino.setups_[`ServoSetup${port}`] = `myWire${port}.begin();\n${Blockly.Arduino.INDENT}myWire${port}.setClock(80L * 1000L);\n`;
   var code = `runServoAngle(myWire${port}, ${direction}, ${absAngle}, ${speed});\n`
