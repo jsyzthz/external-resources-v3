@@ -1,4 +1,4 @@
-/* eslint-disable func-style */
+﻿/* eslint-disable func-style */
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 
@@ -654,27 +654,25 @@ Blockly.Arduino['scratchstar_MotorStop'] = function (block) {
 
 Blockly.Arduino['scratchstar_ServoOutCircle'] = function (block) {
   const port = block.getFieldValue('port')
-  const angle = Blockly.Arduino.valueToCode(block, 'angle', Blockly.Arduino.ORDER_NONE);
+  const circle = Blockly.Arduino.valueToCode(block, 'circle', Blockly.Arduino.ORDER_NONE);
   const speed = Blockly.Arduino.valueToCode(block, 'speed', Blockly.Arduino.ORDER_NONE);
-  const direction = angle < 0 ? '0x02' : '0x01'
+  const direction = circle < 0 ? '0x02' : '0x01'
   const pin1 = port2pin(port, 1)
   const pin2 = port2pin(port, 2)
-  const absAngle = Math.abs(angle);
+  const absCircle = Math.abs(circle);
 
   Blockly.Arduino.includes_["SoftwareWire"] = '#include <SoftwareWire.h>';
   Blockly.Arduino.definitions_[`ServoDefin${port}`] = `SoftwareWire myWire${port}(${pin2}, ${pin1});`;
-
-
-  Blockly.Arduino.customFunctions_['runServoAngle'] = `
-  void runServoAngle(SoftwareWire &wire, uint8_t direction, int angle, uint8_t speed) {
+  Blockly.Arduino.customFunctions_['runServoRevolutions'] = `
+  void runServoRevolutions(SoftwareWire &wire, uint8_t direction, int rpm, uint8_t speed) {
   ${Blockly.Arduino.INDENT}wire.beginTransmission(0x7F);
-  ${Blockly.Arduino.INDENT}byte cmd[] = {0xA0, 0x02, direction, 0x01, speed, 0x00, 0x00, (angle >> 8) & 0xFF, angle & 0xFF};
+  ${Blockly.Arduino.INDENT}byte cmd[] = {0xA0, 0x01, direction, 0x01, speed, (rpm >> 8) & 0xFF, rpm & 0xFF, 0x00, 0x00};
   ${Blockly.Arduino.INDENT}wire.write(cmd, sizeof(cmd));
   ${Blockly.Arduino.INDENT}wire.endTransmission();
   }\n`.replace(/^ {2}/gm, '');
 
   Blockly.Arduino.setups_[`ServoSetup${port}`] = `myWire${port}.begin();\n${Blockly.Arduino.INDENT}myWire${port}.setClock(80L * 1000L);\n`;
-  var code = `runServoAngle(myWire${port}, ${direction}, ${absAngle}, ${speed});\n`
+  var code = `runServoRevolutions(myWire${port},${direction},${absCircle},${speed});\n`
   return code;
 }
 

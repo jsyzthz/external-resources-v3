@@ -1,4 +1,4 @@
-// This file was automatically generated. Do not modify.
+﻿// This file was automatically generated. Do not modify.
 /* eslint-disable func-style */
 /* eslint-disable require-jsdoc */
 /* eslint-disable quotes */
@@ -73,8 +73,8 @@ function registerBlocksMessages (Blockly) {
     "SCRATCHSTAR_MOTOR_FORWARD":"直流电机 %1 正转，速度为 %2",
     "SCRATCHSTAR_MOTOR_BACKWARD":"直流电机 %1 反转，速度为 %2",
     "SCRATCHSTAR_MOTOR_STOP":"直流电机 %1 停转",
-    "SCRATCHSTAR_SERVO_OUT_CIRCLE":"伺服电机 %1 输出角度 %2 速度 %3",
-    "SCRATCHSTAR_SERVO_OUTPUT":"伺服电机 %1 转 %2 圈 速度 %3"
+    "SCRATCHSTAR_SERVO_OUT_CIRCLE":"伺服电机 %1 转 %2 圈 速度 %3",
+    "SCRATCHSTAR_SERVO_OUTPUT":"伺服电机 %1 输出角度 %2 速度 %3"
         }
     );
 
@@ -130,8 +130,8 @@ function registerBlocksMessages (Blockly) {
     "SCRATCHSTAR_MOTOR_FORWARD":"直流电机 %1 正转，速度为 %2",
     "SCRATCHSTAR_MOTOR_BACKWARD":"直流电机 %1 反转，速度为 %2",
     "SCRATCHSTAR_MOTOR_STOP":"直流电机 %1 停转",
-    "SCRATCHSTAR_SERVO_OUT_CIRCLE":"伺服电机 %1 输出角度 %2 速度 %3",
-    "SCRATCHSTAR_SERVO_OUTPUT":"伺服电机 %1 转 %2 圈 速度 %3"
+    "SCRATCHSTAR_SERVO_OUT_CIRCLE":"伺服电机 %1 转 %2 圈 速度 %3",
+    "SCRATCHSTAR_SERVO_OUTPUT":"伺服电机 %1 输出角度 %2 速度 %3"
         }
     );
 
@@ -181,8 +181,8 @@ function registerBlocksMessages (Blockly) {
     "SCRATCHSTAR_MOTOR_FORWARD":"直流电机 %1 正转，速度为 %2",
     "SCRATCHSTAR_MOTOR_BACKWARD":"直流电机 %1 反转，速度为 %2",
     "SCRATCHSTAR_MOTOR_STOP":"直流电机 %1 停转",
-    "SCRATCHSTAR_SERVO_OUT_CIRCLE":"伺服电机 %1 输出角度 %2 速度 %3",
-    "SCRATCHSTAR_SERVO_OUTPUT":"伺服电机 %1 转 %2 圈 速度 %3"
+    "SCRATCHSTAR_SERVO_OUT_CIRCLE":"伺服电机 %1 转 %2 圈 速度 %3",
+    "SCRATCHSTAR_SERVO_OUTPUT":"伺服电机 %1 输出角度 %2 速度 %3"
         }
     );
 
